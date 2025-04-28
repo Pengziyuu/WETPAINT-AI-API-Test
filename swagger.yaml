@@ -1,0 +1,134 @@
+openapi: 3.0.0
+info:
+  title: AI 評分服務 API
+  description: 提供圖像識別和評分的 API 服務
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8000
+    description: 本地開發環境
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: API 金鑰驗證
+
+  schemas:
+    AIRequest:
+      type: object
+      required:
+        - CaseID
+        - imagepath
+        - months
+        - model
+      properties:
+        CaseID:
+          type: string
+          description: 案例識別碼
+        imagepath:
+          type: string
+          description: 圖片路徑（可以是 URL 或本地路徑）
+        months:
+          type: integer
+          description: 月齡
+        model:
+          type: string
+          description: 使用的模型名稱
+
+    AIResponse:
+      type: object
+      required:
+        - CaseID
+        - Score
+        - Probability
+        - Timestamp
+      properties:
+        CaseID:
+          type: string
+          description: 案例識別碼
+        Score:
+          type: object
+          description: 評分結果字典
+        Probability:
+          type: number
+          format: float
+          description: 預測概率
+        Timestamp:
+          type: string
+          format: date-time
+          description: 時間戳記
+
+paths:
+  /:
+    get:
+      summary: API 根路徑
+      description: 返回 API 的基本信息和版本
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          description: 成功響應
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "AI 評分服務 API"
+                  version:
+                    type: string
+                    example: "1.0.0"
+
+  /score:
+    post:
+      summary: 圖像評分
+      description: 處理圖像評分請求
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AIRequest'
+      responses:
+        '200':
+          description: 成功響應
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AIResponse'
+        '400':
+          description: 請求錯誤
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    example: "無法解析圖片格式"
+        '401':
+          description: 未授權
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    example: "無效的 API 金鑰"
+        '500':
+          description: 伺服器錯誤
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    example: "處理圖片時發生錯誤"

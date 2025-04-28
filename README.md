@@ -12,6 +12,7 @@
   - [部署方式比較](#部署方式比較)
 - [外網訪問設定](#外網訪問設定)
 - [API 說明](#api-說明)
+  - [Swagger 文檔](#swagger-文檔)
   - [認證機制](#認證機制)
   - [API 規格](#api-規格)
   - [使用範例](#使用範例)
@@ -40,7 +41,8 @@ ai_service/
 ├── autoScore.py           # AI 評分模型主程式
 ├── config.py              # 配置管理
 ├── draw_trainingdata.zip  # 壓縮的模型訓練資料
-└── requirements.txt       # Python 依賴套件列表
+├── requirements.txt       # Python 依賴套件列表
+└── swagger.yaml           # OpenAPI 規範文件
 ```
 
 ### 模型結構
@@ -132,6 +134,25 @@ draw_trainingdata/
    - 如有必要，配置動態 DNS 服務
 
 ## API 說明
+
+### Swagger 文檔
+
+本專案提供完整的 Swagger API 文檔，您可以通過以下方式訪問：
+
+1. **Swagger UI**：
+   - 訪問 `http://localhost:8000/docs`
+   - 提供互動式的 API 測試界面
+   - 支援直接在瀏覽器中測試 API 端點
+
+2. **ReDoc**：
+   - 訪問 `http://localhost:8000/redoc`
+   - 提供更詳細的 API 文檔視圖
+   - 適合閱讀和參考
+
+3. **OpenAPI 規範文件**：
+   - 位置：`swagger.yaml`
+   - 符合 OpenAPI 3.0.0 規範
+   - 可用於生成客戶端代碼或導入到其他 API 工具
 
 ### 認證機制
 
