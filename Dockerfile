@@ -41,13 +41,15 @@ RUN pip install --no-cache-dir -r requirements.txt
 RUN pip install torch==2.0.1 torchvision==0.15.2 --extra-index-url https://download.pytorch.org/whl/cu118
 
 # 複製模型和資料（使用壓縮文件）
-COPY autoScore.py .
-COPY draw_trainingdata.zip .
+RUN wget -O draw_trainingdata.zip "https://drive.google.com/uc?export=download&id=13YjzEWZwkNvKrpD6Mp8xaAgLFJ0IwCaZ"
+
+# 解壓縮模型檔案，然後刪除 zip 檔以節省空間
 RUN unzip -O UTF-8 draw_trainingdata.zip && rm draw_trainingdata.zip
 
 # 複製 API 代碼
 COPY api.py .
 COPY config.py .
+COPY autoScore.py .
 
 EXPOSE 8000
 
