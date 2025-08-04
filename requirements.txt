@@ -23,6 +23,4 @@ imutils==0.5.4  # 圖像處理工具
 scikit-image==0.20.0  # 進階圖像處理
 imageio==2.31.1  # 影像讀寫
 shapely==2.0.1  # 幾何形狀處理
-# numpy==1.24.3  # 數值計算
-numpy==1.23.5  # 已修改: 修正與 TensorFlow 的版本衝突
-scipy==1.9.1   # 已新增: 修正與 scikit-image 的版本衝突 
+numpy==1.24.3  # 數值計算

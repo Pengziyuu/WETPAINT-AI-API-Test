@@ -41,14 +41,16 @@ RUN pip install --no-cache-dir -r requirements.txt
 # 安裝 PyTorch 和 CUDA 支援
 RUN pip install torch==2.0.1 torchvision==0.15.2 --extra-index-url https://download.pytorch.org/whl/cu118
 
-# COPY draw_trainingdata.zip .
-# RUN unzip -O UTF-8 draw_trainingdata.zip && rm draw_trainingdata.zip
-
 # 複製模型和資料（使用壓縮文件）
-RUN wget -O draw_trainingdata.zip "https://drive.google.com/uc?export=download&id=13YjzEWZwkNvKrpD6Mp8xaAgLFJ0IwCaZ"
+# COPY draw_trainingdata.zip .
 
 # 解壓縮模型檔案，然後刪除 zip 檔以節省空間
-RUN unzip -O UTF-8 draw_trainingdata.zip && rm draw_trainingdata.zip
+# RUN unzip -O UTF-8 draw_trainingdata.zip && rm draw_trainingdata.zip
+
+# 安裝 gdown 並下載、解壓縮資料
+RUN pip install gdown && \
+    gdown 13YjzEWZwkNvKrpD6Mp8xaAgLFJ0IwCaZ && \
+    unzip draw_trainingdata.zip && rm draw_trainingdata.zip
 
 # 複製 API 代碼
 COPY api.py .

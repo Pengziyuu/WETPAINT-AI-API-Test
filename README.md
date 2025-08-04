@@ -40,7 +40,7 @@ ai_service/
 ├── api.py                 # API 服務主程式
 ├── autoScore.py           # AI 評分模型主程式
 ├── config.py              # 配置管理
-├── draw_trainingdata.zip  # 壓縮的模型訓練資料
+├── draw_trainingdata.zip  # 壓縮的模型訓練資料 (已移至雲端)
 ├── requirements.txt       # Python 依賴套件列表
 └── swagger.yaml           # OpenAPI 規範文件
 ```
