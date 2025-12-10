@@ -1,17 +1,15 @@
-from fastapi import FastAPI, HTTPException, Depends, Request
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import uvicorn
 import cv2
 import numpy as np
 from datetime import datetime
-from config import settings
 from autoScore import Runall
 import requests
 import logging
 import os
 import sys
-from pathlib import Path
 
 # 設置日誌
 logging.basicConfig(level=logging.INFO)
@@ -71,34 +69,9 @@ class AIResponse(BaseModel):
     Probability: float
     Timestamp: str
 
-# API 金鑰驗證函數
-async def verify_api_key(request: Request = None):
-    """驗證 API 金鑰"""
-    # 從請求標頭中提取 API 金鑰
-    api_key = request.headers.get(settings.API_KEY_NAME)
-    
-    # 日誌記錄
-    logger.debug(f"收到 API 請求，標頭: {settings.API_KEY_NAME}")
-    
-    # 驗證 API 金鑰
-    if api_key != settings.API_KEY:
-        logger.warning(f"API 金鑰驗證失敗")
-        raise HTTPException(
-            status_code=401,
-            detail="無效的 API 金鑰"
-        )
-    return api_key
-
-# 建立 API 金鑰驗證依賴
-def get_api_key_dependency():
-    """返回 API 金鑰驗證依賴"""
-    async def _verify_api_key(request: Request):
-        return await verify_api_key(request=request)
-    return _verify_api_key
-
 # 根路徑
 @app.get("/")
-async def root(api_key: str = Depends(get_api_key_dependency())):
+async def root():
     """API 根路徑，返回歡迎信息"""
     return {"message": "AI 評分服務 API", "version": "1.0.0"}
 
@@ -144,8 +117,7 @@ def download_image_from_url(url: str) -> np.ndarray:
 # 評分 API 端點
 @app.post("/score", response_model=AIResponse)
 async def score_image(
-    request: AIRequest,
-    api_key: str = Depends(get_api_key_dependency())
+    request: AIRequest
 ):
     """處理圖像評分請求"""
     try:
