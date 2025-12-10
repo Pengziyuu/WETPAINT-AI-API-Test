@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 評分服務 - 前端測試頁面</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>AI 評分服務測試</h1>
+            <p>輸入參數並測試 API 回應</p>
+        </header>
+
+        <main>
+            <div class="card config-card">
+                <h2>⚙️ API 設定</h2>
+                <div class="form-group">
+                    <label for="api-url">API Base URL</label>
+                    <input type="text" id="api-url" value="https://01227d2d61f0.ngrok-free.app"
+                        placeholder="http://localhost:8000">
+                </div>
+            </div>
+
+            <div class="card input-card">
+                <h2>📝 測試參數</h2>
+                <form id="score-form">
+                    <div class="form-group">
+                        <label for="case-id">Case ID</label>
+                        <input type="text" id="case-id" value="WETP00APItest" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="months">月齡 (Months)</label>
+                        <input type="number" id="months" value="24" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="model">模型 (Model)</label>
+                        <input type="text" id="model" value="default" placeholder="default">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="image-url">圖片 URL</label>
+                        <input type="url" id="image-url" value="https://i.imgur.com/1y1dbEQ.jpeg"
+                            placeholder="https://example.com/image.jpg" required>
+                        <div class="image-preview" id="image-preview-container" style="display: none;">
+                            <img id="image-preview" src="" alt="圖片預覽">
+                        </div>
+                    </div>
+
+                    <button type="submit" id="submit-btn" class="btn-primary">
+                        <span class="btn-text">開始評分</span>
+                        <span class="loader" style="display: none;"></span>
+                    </button>
+                    <div id="error-message" class="error-banner" style="display: none;"></div>
+                </form>
+            </div>
+
+            <div id="result-section" class="card result-card" style="display: none;">
+                <h2>📊 評分結果</h2>
+                <div class="result-header">
+                    <div class="stat">
+                        <span class="label">Total Score</span>
+                        <span class="value huge" id="res-total">0.0</span>
+                    </div>
+                    <div class="stat">
+                        <span class="label">Probability</span>
+                        <span class="value" id="res-prob">0.0</span>
+                    </div>
+                    <div class="stat">
+                        <span class="label">Result ID</span>
+                        <span class="value mono" id="res-caseid">-</span>
+                    </div>
+                </div>
+
+                <div class="charts">
+                    <h3>詳細分數</h3>
+                    <div class="bar-chart">
+                        <div class="bar-row">
+                            <span class="bar-label">圓形 (O)</span>
+                            <div class="bar-track">
+                                <div class="bar-fill" id="bar-o" style="width: 0%"></div>
+                            </div>
+                            <span class="bar-value" id="val-o">0</span>
+                        </div>
+                        <div class="bar-row">
+                            <span class="bar-label">十字 (X)</span>
+                            <div class="bar-track">
+                                <div class="bar-fill" id="bar-x" style="width: 0%"></div>
+                            </div>
+                            <span class="bar-value" id="val-x">0</span>
+                        </div>
+                        <div class="bar-row">
+                            <span class="bar-label">方形 (S)</span>
+                            <div class="bar-track">
+                                <div class="bar-fill" id="bar-s" style="width: 0%"></div>
+                            </div>
+                            <span class="bar-value" id="val-s">0</span>
+                        </div>
+                        <div class="bar-row">
+                            <span class="bar-label">三角形 (T)</span>
+                            <div class="bar-track">
+                                <div class="bar-fill" id="bar-t" style="width: 0%"></div>
+                            </div>
+                            <span class="bar-value" id="val-t">0</span>
+                        </div>
+                        <div class="bar-row">
+                            <span class="bar-label">菱形 (D)</span>
+                            <div class="bar-track">
+                                <div class="bar-fill" id="bar-d" style="width: 0%"></div>
+                            </div>
+                            <span class="bar-value" id="val-d">0</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="timestamp"> Timestamp: <span id="res-time"></span></div>
+            </div>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>
