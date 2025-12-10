@@ -9,13 +9,6 @@ servers:
     description: 本地開發環境
 
 components:
-  securitySchemes:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: X-API-Key
-      description: API 金鑰驗證
-
   schemas:
     AIRequest:
       type: object
@@ -66,8 +59,7 @@ paths:
     get:
       summary: API 根路徑
       description: 返回 API 的基本信息和版本
-      security:
-        - ApiKeyAuth: []
+
       responses:
         '200':
           description: 成功響應
@@ -87,8 +79,7 @@ paths:
     post:
       summary: 圖像評分
       description: 處理圖像評分請求
-      security:
-        - ApiKeyAuth: []
+
       requestBody:
         required: true
         content:
@@ -112,16 +103,7 @@ paths:
                   detail:
                     type: string
                     example: "無法解析圖片格式"
-        '401':
-          description: 未授權
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  detail:
-                    type: string
-                    example: "無效的 API 金鑰"
+
         '500':
           description: 伺服器錯誤
           content:

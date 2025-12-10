@@ -54,7 +54,6 @@ RUN pip install gdown && \
 
 # 複製 API 代碼
 COPY api.py .
-COPY config.py .
 COPY autoScore.py .
 
 EXPOSE 8000

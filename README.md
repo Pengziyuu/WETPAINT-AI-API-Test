@@ -13,7 +13,6 @@
 - [外網訪問設定](#外網訪問設定)
 - [API 說明](#api-說明)
   - [Swagger 文檔](#swagger-文檔)
-  - [認證機制](#認證機制)
   - [API 規格](#api-規格)
   - [使用範例](#使用範例)
 - [疑難排解](#疑難排解)
@@ -22,7 +21,6 @@
 ## 功能特點
 
 - 容器化部署（支援 CUDA）
-- 安全的 API 金鑰認證
 - 基於 FastAPI 的高效框架
 - 多模型圖像評分功能
 - 支援五種基本圖形識別（圓形、十字、方形、三角形、菱形）
@@ -34,13 +32,10 @@
 
 ```
 ai_service/
-├── .env                   # 環境變數設定檔
 ├── Dockerfile             # Docker 容器設定檔
 ├── README.md              # 專案說明文件
 ├── api.py                 # API 服務主程式
 ├── autoScore.py           # AI 評分模型主程式
-├── config.py              # 配置管理
-├── draw_trainingdata.zip  # 壓縮的模型訓練資料 (已移至雲端)
 ├── requirements.txt       # Python 依賴套件列表
 └── swagger.yaml           # OpenAPI 規範文件
 ```
@@ -75,12 +70,12 @@ draw_trainingdata/
 
 2. **GPU 模式運行**：
    ```bash
-   docker run --gpus all -p 0.0.0.0:8000:8000 --env-file .env ai-service
+   docker run --gpus all -p 0.0.0.0:8000:8000 ai-service
    ```
 
 3. **CPU 模式運行**：
    ```bash
-   docker run -p 0.0.0.0:8000:8000 --env-file .env ai-service
+   docker run -p 0.0.0.0:8000:8000 ai-service
    ```
 
 ### 本機開發環境
@@ -154,34 +149,12 @@ draw_trainingdata/
    - 符合 OpenAPI 3.0.0 規範
    - 可用於生成客戶端代碼或導入到其他 API 工具
 
-### 認證機制
-
-#### 設定 API 金鑰
-
-1. 編輯 `.env` 文件，設定您的 API 金鑰：
-   ```
-   API_KEY=my_secret_key_123
-   ```
-
-2. 安全建議：
-   - 使用至少 32 個隨機字符
-   - 定期更換金鑰
-   - 不要提交金鑰到版本控制系統
-
-#### 使用 API 金鑰
-
-所有請求都需要在 HTTP 標頭中包含 API 金鑰：
-```
-X-API-Key: your_api_key
-```
-
 ### API 規格
 
 #### 評分端點
 
 - **URL**: `/score`
 - **方法**: POST
-- **認證**: 需要 API 金鑰
 
 #### 請求格式
 ```json
@@ -217,7 +190,6 @@ X-API-Key: your_api_key
 ```bash
 curl -X POST "http://your-server-ip:8000/score" \
   -H "Content-Type: application/json" \
-  -H "X-API-Key: your_api_key" \
   -d '{
     "CaseID": "case123",
     "imagepath": "https://example.com/image.jpg",
@@ -233,8 +205,7 @@ import requests
 
 url = "http://your-server-ip:8000/score"
 headers = {
-    "Content-Type": "application/json",
-    "X-API-Key": "your_api_key"
+    "Content-Type": "application/json"
 }
 
 data = {
@@ -250,17 +221,13 @@ print(response.json())
 
 ## 疑難排解
 
-### 常見認證問題
+### 常見問題
 
-1. **401 Unauthorized 錯誤**：
-   - 確認 API 金鑰標頭名稱是否為 `X-API-Key`
-   - 確認金鑰值與 `.env` 文件匹配
-
-2. **圖片載入錯誤**：
+1. **圖片載入錯誤**：
    - 檢查 imagepath 是否可訪問
    - 確認支援的圖片格式
 
-3. **模型載入錯誤**：
+2. **模型載入錯誤**：
    - 確認 draw_trainingdata 目錄是否正確解壓
    - 檢查模型文件權限
 
