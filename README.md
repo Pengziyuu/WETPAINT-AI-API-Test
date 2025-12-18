@@ -238,3 +238,5 @@ print(response.json())
 - 建議使用 HTTPS 保護 API 通信
 - 定期更新系統和依賴以確保安全性
 - 在生產環境中設置適當的日誌記錄和監控 
+
+https://34211b79bc03.ngrok-free.app
